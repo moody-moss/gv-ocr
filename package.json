@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/moody-moss/gv-ocr/issues"
   },
-  "homepage": "https://github.com/moody-moss/gv-ocr#readme"
+  "homepage": "https://github.com/moody-moss/gv-ocr#readme",
+  "dependencies": {
+    "@google-cloud/vision": "^2.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
+  }
 }
