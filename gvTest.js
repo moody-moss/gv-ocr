@@ -22,7 +22,7 @@ async function gv_ocr() {
     const client = new vision.ImageAnnotatorClient()
 
     // Performs label detection on the image file -> https://qwe-1.herokuapp.com/out.jpeg
-    client.textDetection('https://practice.typekit.com/social/l002-social.jpg')
+    client.textDetection('https://qwe-1.herokuapp.com/out.jpeg')
         .then(results => {
             const result = results[0].textAnnotations
             console.log(`Text Annotation Result: ${JSON.stringify(result[0].description, null, 2)}`)
