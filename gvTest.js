@@ -43,13 +43,14 @@ function gv_ocr() {
     client.textDetection('https://qwe-1.herokuapp.com/out.jpeg')
         .then(results => {
             const result = results[0].textAnnotations
-            console.log(`Text Annotation Result: ${JSON.stringify(result)}`)
+            const resultGet = JSON.stringify(result)
+            console.log(`Text Annotation Result: ${resultGet}`)
             
 
             app.get('/gv-txt', (req, res) => {
-                res.send(
-                    JSON.stringify(result)
-                )
+                res.send({
+                    resultGet
+                })
             })
 
         })
