@@ -19,7 +19,9 @@
   "dependencies": {
     "@google-cloud/vision": "^2.4.0",
     "cors": "^2.8.5",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
