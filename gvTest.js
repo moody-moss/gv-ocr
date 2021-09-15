@@ -5,7 +5,7 @@ const { json } = require('express')
 
 const app = express()
 
-app.use(express.json())
+//app.use(express.json())
 
 app.use(cors({ origin: '*' }))
 app.options('*', cors()) // enable preflight across-the-board --> include bfeore other route
@@ -45,11 +45,11 @@ function gv_ocr() {
             const result = results[0].textAnnotations
             const resultGet = JSON.stringify(result)
             console.log(`Text Annotation Result: ${resultGet}`)
-            
+
 
             app.get('/gv-txt', (req, res) => {
                 res.send(
-                    {resultGet}
+                    resultGet
                 )
             })
 
@@ -58,6 +58,8 @@ function gv_ocr() {
             console.log('Error:', err)
         })
 }
+
+//gv_ocr()
 
 
 function gv_ocr_1() {
@@ -84,8 +86,46 @@ function gv_ocr_1() {
         })
 }
 
+async function quickstart() {
 
-gv_ocr()
+    // Creates a client
+    const client = new vision.ImageAnnotatorClient();
+
+    // Performs label detection on the image file
+    const [result] = await client.textDetection('https://qwe-1.herokuapp.com/out.jpeg');
+    const labels = result.textAnnotations;
+    console.log(labels);
+
+    app.get('/gv-txt-1' , (req, res) => {
+        res.send(
+            labels
+        )
+    })
+
+    labels.forEach(label => {
+        console.log(label.description)
+    });
+
+
+}
+
+quickstart()
+
+
+// app.get('/gv-test-003', (req, res) => {
+//     const client = new vision.ImageAnnotatorClient();
+
+//     // Performs label detection on the image file
+//     const [result] = await client.textDetection('https://qwe-1.herokuapp.com/out.jpeg');
+//     const labels = result.textAnnotations;
+//     console.log('Labels:');
+
+//     labels.forEach(label => {
+//         console.log(typeof label.description)
+//     });
+
+   
+// })
 
 
 const server = app.listen(process.env.PORT || 1000, () => {
