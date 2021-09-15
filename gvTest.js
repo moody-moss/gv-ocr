@@ -49,7 +49,7 @@ function gv_ocr() {
 
             app.get('/gv-txt', (req, res) => {
                 res.send(
-                    resultGet
+                    {resultGet}
                 )
             })
 
@@ -59,7 +59,7 @@ function gv_ocr() {
         })
 }
 
-//gv_ocr()
+gv_ocr()
 
 
 function gv_ocr_1() {
@@ -109,7 +109,7 @@ async function quickstart() {
 
 }
 
-quickstart()
+//quickstart()
 
 
 // app.get('/gv-test-003', (req, res) => {
