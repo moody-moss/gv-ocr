@@ -1,6 +1,8 @@
 const express = require('express')
 const cors = require('cors')
 const vision = require('@google-cloud/vision')
+const fs = require('fs')
+const path = require('path')
 const { json } = require('express')
 
 const app = express()
@@ -10,18 +12,66 @@ const app = express()
 app.use(cors({ origin: '*' }))
 app.options('*', cors()) // enable preflight across-the-board --> include bfeore other route
 
+app.use(express.text({ limit: '50mb' }))
+
+// credential
+process.env.GOOGLE_APPLICATION_CREDENTIALS = './fourth-buffer-325405-04aa91f83467.json'
+
 app.get('/coffee', (req, res) => {
     res.send({
         resCoffee: 'got it!'
     })
 })
 
-// credential
-process.env.GOOGLE_APPLICATION_CREDENTIALS = './fourth-buffer-325405-04aa91f83467.json'
+app.use(express.static('public'))
+app.use('/images', express.static(path.join(__dirname, '/public')))
+
+app.post('/post-base64', (req, res) => {
+    let strBase64 = req.body
+    console.log(strBase64)
+
+    // Save img as 'label.jpeg'/'out.jpeg'
+    fs.writeFile(__dirname + '/public/out.jpeg', strBase64, 'base64', (err, data) => {
+        if (err) {
+            console.log(`error: ${err}`)
+            res.send({
+                sendStatus: `error: ${err}`
+            })
+        }
+        
+        console.log('base64 -> jpeg succeeded')
+
+        async function quickstart() {
+            // Creates a client
+            const client = new vision.ImageAnnotatorClient();
+
+            // Performs label detection on the image file
+            const [result] = await client.textDetection(__dirname + '/public/out.jpeg');
+            const labels = result.textAnnotations;
+            console.log(labels);
+
+            res.send(
+                {
+                    sendStatus: 'succeeded',
+                    dirPath: `${__dirname} ${'/public/out.jpeg'}`,
+                    txt: labels
+                }
+            )
+
+            labels.forEach(label => {
+                console.log(label.description)
+            });
+        }
+
+        quickstart()
+    })
+
+})
 
 async function x() {
     const client = new vision.ImageAnnotatorClient()
-    const URL_Path = `https://qwe-1.herokuapp.com/out.jpeg`
+    //`https://qwe-1.herokuapp.com/out.jpeg`
+    const URL_Path = __dirname + '/public/out.jpeg'
 
     const [result] = await client.textDetection(URL_Path)
     const detections = result.textAnnotations
@@ -35,7 +85,6 @@ async function x() {
 }
 
 function gv_ocr() {
-
     // Creates a client
     const client = new vision.ImageAnnotatorClient()
 
@@ -58,9 +107,6 @@ function gv_ocr() {
             console.log('Error:', err)
         })
 }
-
-gv_ocr()
-
 
 function gv_ocr_1() {
 
@@ -87,26 +133,18 @@ function gv_ocr_1() {
 }
 
 async function quickstart() {
-
     // Creates a client
     const client = new vision.ImageAnnotatorClient();
 
     // Performs label detection on the image file
-    const [result] = await client.textDetection('https://qwe-1.herokuapp.com/out.jpeg');
+    const [result] = await client.textDetection(__dirname + '/public/out.jpeg');
     const labels = result.textAnnotations;
     console.log(labels);
 
-    app.get('/gv-txt-1' , (req, res) => {
-        res.send(
-            labels
-        )
-    })
-
     labels.forEach(label => {
         console.log(label.description)
+        return label.description
     });
-
-
 }
 
 //quickstart()
@@ -124,7 +162,7 @@ async function quickstart() {
 //         console.log(typeof label.description)
 //     });
 
-   
+
 // })
 
 
