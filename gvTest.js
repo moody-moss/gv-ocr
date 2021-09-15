@@ -49,7 +49,7 @@ function gv_ocr() {
 
             app.get('/gv-txt', (req, res) => {
                 res.send(
-                    {resultGet}
+                    resultGet
                 )
             })
 
