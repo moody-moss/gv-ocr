@@ -68,6 +68,8 @@ app.post('/post-base64', (req, res) => {
 
 })
 
+app.use(express.static('public'))
+app.use('/files', express.static(path.join(__dirname, '/public')))
 app.post('/post-serial', (req, res) => {
     let serial = req.body
     console.log(`scanned value: ${serial}`)
