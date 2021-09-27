@@ -68,7 +68,24 @@ app.post('/post-base64', (req, res) => {
 
 })
 
- 
+app.post('/post-serial', (req, res) => {
+    let serial = req.body
+    console.log(`scanned value: ${serial}`)
+
+    fs.writeFile(__dirname +'/public/serial.txt', serial, (err, data) => {
+        if (err) {
+            console.log(`error: ${err}`)
+            res.send({
+                sendStatus: `error: ${err}`
+            })
+        }
+        res.send({
+            sendStatus: serial
+        })
+        console.log('serial -> json succeeded')
+    })
+})
+
 
 const server = app.listen(process.env.PORT || 1000, () => {
     const port = server.address().port
